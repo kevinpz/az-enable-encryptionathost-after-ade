@@ -91,7 +91,7 @@ pwsh remove-extension.ps1
 ```
 
 ### Create a new disk with the old data
-Directly duplicating the disk, or using a snapshot won't allowed encryption at host to be enable. You need to create a new disk and transfer the data from the old one.
+Directly duplicating the disk, or using a snapshot won't allow encryption at host to be enable. You need to create a new disk and transfer the data from the old one.
 
 > [!IMPORTANT]  
 > Stop the VM first
