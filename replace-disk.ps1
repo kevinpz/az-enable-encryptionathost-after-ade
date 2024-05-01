@@ -67,7 +67,7 @@ Write-Host "--> Swapping the VM OS disk"
 Set-AzVMOSDisk -VM $vm -ManagedDiskId $($newDisk.Id) -Name $($newDisk.Name) | Out-Null
 # Update the VM with the new disks
 Write-Host "--> Updating the VM config"
-Update-AzVM -ResourceGroupName $rgName -VM $vm 
+Update-AzVM -ResourceGroupName $rgName -VM $vm | Out-Null
 
 Write-Host "-> Data Disks"
 # Need to create a duplicate object because we're looping on the object and altering it at the same time
@@ -87,7 +87,7 @@ $vmDataDisk | foreach {
     Remove-AzVMDataDisk -VM $vm -Name $($_.Name) | Out-Null
     # Update the VM with the new disks
     Write-Host "--> Updating the VM config"
-    Update-AzVM -ResourceGroupName $rgName -VM $vm 
+    Update-AzVM -ResourceGroupName $rgName -VM $vm | Out-Null
 
     # Attach the new data disk to the vm with the same LUN
     Write-Host "--> Attaching the new data disk $($newDisk.Name)"

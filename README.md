@@ -100,3 +100,48 @@ You can run this command to do the start the process:
 ```bash
 pwsh replace-disk.ps1
 ```
+
+Command return:
+```
+Finding the VM
+-> OS Disk
+--> Duplicating the OS disk vm-test-encryption_OsDisk_1_345eacc4104d46e396d987af3a9d6aa5
+---> Getting the VM old disk informations
+---> Creating the new disk config
+---> Creating the disk in Azure
+---> Getting a read SAS token for the old disk
+---> Getting a write SAS token for the new disk
+---> Running azcopy to transfer the data (this may take a while)
+---> Removing the SAS token for the old disk
+---> Removing the SAS token for the new disk
+------> New disk info
+--> Swapping the VM OS disk
+--> Updating the VM config
+-> Data Disks
+--> Duplicating the data disk vm-test-encryption_DataDisk_0
+---> Getting the VM old disk informations
+---> Creating the new disk config
+---> Creating the disk in Azure
+---> Getting a read SAS token for the old disk
+---> Getting a write SAS token for the new disk
+---> Running azcopy to transfer the data (this may take a while)
+---> Removing the SAS token for the old disk
+---> Removing the SAS token for the new disk
+--> Removing the old data disk vm-test-encryption_DataDisk_0
+--> Updating the VM config
+--> Attaching the new data disk vm-test-encryption_DataDisk_0_noade
+--> Updating the VM config
+--> Duplicating the data disk vm-test-encryption_DataDisk_1
+---> Getting the VM old disk informations
+---> Creating the new disk config
+---> Creating the disk in Azure
+---> Getting a read SAS token for the old disk
+---> Getting a write SAS token for the new disk
+---> Running azcopy to transfer the data (this may take a while)
+---> Removing the SAS token for the old disk
+---> Removing the SAS token for the new disk
+--> Removing the old data disk vm-test-encryption_DataDisk_1
+--> Updating the VM config
+--> Attaching the new data disk vm-test-encryption_DataDisk_1_noade
+--> Updating the VM config
+```
