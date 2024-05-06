@@ -78,21 +78,24 @@ $vm.StorageProfile.DataDisks | foreach {
 
 # Duplicate all the data disks
 $vmDataDisk | foreach { 
-    # Create a new data disk
-    Write-Host "--> Duplicating the data disk $($_.Name)"
-    $newDisk = DuplicateDisk $($_.Name)
+    # If we have data disk
+    if ($_) {
+        # Create a new data disk
+        Write-Host "--> Duplicating the data disk $($_.Name)"
+        $newDisk = DuplicateDisk $($_.Name)
 
-    # Remove the old data disk from the VM
-    Write-Host "--> Removing the old data disk $($_.Name)"
-    Remove-AzVMDataDisk -VM $vm -Name $($_.Name) | Out-Null
-    # Update the VM with the new disks
-    Write-Host "--> Updating the VM config"
-    Update-AzVM -ResourceGroupName $rgName -VM $vm | Out-Null
+        # Remove the old data disk from the VM
+        Write-Host "--> Removing the old data disk $($_.Name)"
+        Remove-AzVMDataDisk -VM $vm -Name $($_.Name) | Out-Null
+        # Update the VM with the new disks
+        Write-Host "--> Updating the VM config"
+        Update-AzVM -ResourceGroupName $rgName -VM $vm | Out-Null
 
-    # Attach the new data disk to the vm with the same LUN
-    Write-Host "--> Attaching the new data disk $($newDisk.Name)"
-    Add-AzVMDataDisk -VM $vm -Name $($newDisk.Name) -CreateOption Attach -ManagedDiskId $($newDisk.Id) -Lun $($_.Lun) | Out-Null
-    # Update the VM with the new disks
-    Write-Host "--> Updating the VM config"
-    Update-AzVM -ResourceGroupName $rgName -VM $vm 
+        # Attach the new data disk to the vm with the same LUN
+        Write-Host "--> Attaching the new data disk $($newDisk.Name)"
+        Add-AzVMDataDisk -VM $vm -Name $($newDisk.Name) -CreateOption Attach -ManagedDiskId $($newDisk.Id) -Lun $($_.Lun) | Out-Null
+        # Update the VM with the new disks
+        Write-Host "--> Updating the VM config"
+        Update-AzVM -ResourceGroupName $rgName -VM $vm 
+    }
 }
