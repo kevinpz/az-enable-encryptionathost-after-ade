@@ -145,3 +145,12 @@ Finding the VM
 --> Attaching the new data disk vm-test-encryption_DataDisk_1_noade
 --> Updating the VM config
 ```
+
+### Enable encryption at host
+> [!IMPORTANT]  
+> Stop the VM first
+
+Once the new disk are in place, you can enable encryption at host
+```bash
+pwsh enable-encryptionathost.ps1
+```
