@@ -8,7 +8,7 @@ param (
 # Select to the subscription
 Set-AzContext -Subscription $subscriptionName | Out-Null
 
-if ($LoadFromFile) {
+if (-Not($LoadFromFile)) {
     # Get the VM
     Write-Host "-> Finding the source VM"
     $vmSource = Get-AzVm -ResourceGroupName $rgName -Name $vmName
