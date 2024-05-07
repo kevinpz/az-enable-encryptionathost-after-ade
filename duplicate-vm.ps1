@@ -100,7 +100,7 @@ $vmDataDisk | foreach {
 
 Write-Host "-> Creating the new VM"
 # Remove some parameters not needed for the creation
-$newVm = $vm | Select-Object -Property * -ExcludeProperty Id, VmId, ProvisioningState, RequestId, StatusCode, ResourceGroupName, TimeCreated
+$newVm = $vm | Select-Object -Property * -ExcludeProperty Id, VmId, ProvisioningState, RequestId, StatusCode, ResourceGroupName, TimeCreated, OsProfile
 $newVm.Name = "$($vm.Name)_noade"
 
 New-AzVM -VM $newVm -ResourceGroupName $rgName -Location $vm.Location
