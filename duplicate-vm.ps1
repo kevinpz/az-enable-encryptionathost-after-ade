@@ -103,5 +103,5 @@ Write-Host "-> Creating the new VM"
 $newVm = $vm | Select-Object -Property * -ExcludeProperty Id, VmId, ProvisioningState, RequestId, StatusCode, ResourceGroupName, TimeCreated
 $newVm.Name = "$($vm.Name)_noade"
 
-New-AzVM -VM $newVm
+New-AzVM -VM $newVm -ResourceGroupName $rgName
 
