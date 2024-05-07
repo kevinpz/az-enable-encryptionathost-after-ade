@@ -146,7 +146,7 @@ Finding the VM
 
 > [!Before replacing the old VM with the new one (to have the same name), verify that the duplicate VM called VM_noade is running properly!]  
 
-You can run this command to do the start the process:
+You can run this command to start the process:
 ```bash
 pwsh replace-vm.ps1
 ```

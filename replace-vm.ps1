@@ -8,7 +8,7 @@ Set-AzContext -Subscription $subscriptionName | Out-Null
 Write-Host "-> Finding the source VM"
 $vmSource = Get-AzVm -ResourceGroupName $rgName -Name $vmName
 Write-Host "-> Finding the duplicate VM"
-$vmDuplicate = Get-AzVm -ResourceGroupName $rgName -Name "$($vm.Name)_noade"
+$vmDuplicate = Get-AzVm -ResourceGroupName $rgName -Name "$($vmSource.Name)_noade"
 
 # Update deleteoption properties
 Write-Host "-> Updating the delete behavior on the source VM (keep everything)"
