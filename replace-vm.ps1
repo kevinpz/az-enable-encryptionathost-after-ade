@@ -29,12 +29,13 @@ if ($LoadFromFile) {
     $vmDuplicate | Update-AzVM | Out-Null
 
     # Saving the original VM object to the disk, just in case ...
-    $vmSource | Export-Clixml sourceVm.xml -Depth 20
-    $vmDuplicate | Export-Clixml duplicateVm.xml -Depth 20
+    Write-Host "-> Saving the VM config to file just in case :)"
+    #$vmSource | Export-Clixml sourceVm.xml -Depth 20
+    #$vmDuplicate | Export-Clixml duplicateVm.xml -Depth 20
 
     Write-Host "-> If the script fails for whatever reason after the VM deletion ..."
     Write-Host "-> Use the following parameters to start it:"
-    #Write-Host "-Location" $($vmSource.Location) "-OsDisk" $osDiskName "-DataDisks" "@("$($vmDataDisk | ForEach-Object { "@{Name='$($_.Name)';Lun='$($_.Lun)'};"})")" "-Nic" $nicId
+    Write-Host "pwsh replace-vm.ps1 -LoadFromFile"
 
     # Delete the source VM and the duplicate VM
     Write-Host "-> Removing the duplicate VM $($vmDuplicate.Id)"
@@ -43,6 +44,7 @@ if ($LoadFromFile) {
     Remove-AzVm -Id $($vmSource.Id) -ForceDeletion $true
 }
 else {
+    Write-Host "-> Loading source and duplicate config VM from file"
     $vmSource=Import-Clixml -Path sourceVm.xml
     $vmDuplicate=Import-Clixml -Path duplicateVm.xml
 }
