@@ -98,7 +98,7 @@ Directly duplicating the disk, or using a snapshot won't allow encryption at hos
 
 You can run this command to do the start the process:
 ```bash
-pwsh replace-disk.ps1
+pwsh duplicate-vm.ps1
 ```
 
 Command return:
@@ -116,7 +116,6 @@ Finding the VM
 ---> Removing the SAS token for the new disk
 ------> New disk info
 --> Swapping the VM OS disk
---> Updating the VM config
 -> Data Disks
 --> Duplicating the data disk vm-test-encryption_DataDisk_0
 ---> Getting the VM old disk informations
@@ -128,9 +127,7 @@ Finding the VM
 ---> Removing the SAS token for the old disk
 ---> Removing the SAS token for the new disk
 --> Removing the old data disk vm-test-encryption_DataDisk_0
---> Updating the VM config
 --> Attaching the new data disk vm-test-encryption_DataDisk_0_noade
---> Updating the VM config
 --> Duplicating the data disk vm-test-encryption_DataDisk_1
 ---> Getting the VM old disk informations
 ---> Creating the new disk config
@@ -141,9 +138,17 @@ Finding the VM
 ---> Removing the SAS token for the old disk
 ---> Removing the SAS token for the new disk
 --> Removing the old data disk vm-test-encryption_DataDisk_1
---> Updating the VM config
 --> Attaching the new data disk vm-test-encryption_DataDisk_1_noade
---> Updating the VM config
+-> Creating the new VM
+```
+
+### Replacing the VM
+
+> [!Before replacing the old VM with the new one (to have the same name), verify that the duplicate VM called VM_noade is running properly!]  
+
+You can run this command to do the start the process:
+```bash
+pwsh replace-vm.ps1
 ```
 
 ### Enable encryption at host
