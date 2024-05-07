@@ -98,7 +98,7 @@ $vmDataDisk | foreach {
 }
 
 $newVm = $vm | Select-Object -Property * -ExcludeProperty Id, VmId, ProvisioningState, RequestId, StatusCode
-$vm.Name = "$($vm.Name)_noade"
+$newVm.Name = "$($vm.Name)_noade"
 
 New-AzVM -VM $newVm
 
