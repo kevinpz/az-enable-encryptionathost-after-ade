@@ -15,13 +15,13 @@ Write-Host "-> Updating the delete behavior on the source VM (keep everything)"
 $vmSource.StorageProfile.OsDisk.DeleteOption = 'Detach'
 $vmSource.StorageProfile.DataDisks | ForEach-Object { $_.DeleteOption = 'Detach' }
 $vmSource.NetworkProfile.NetworkInterfaces | ForEach-Object { $_.DeleteOption = 'Detach' }
-$vmSource | Update-AzVM
+#$vmSource | Update-AzVM
 
 Write-Host "-> Updating the delete behavior on the duplicate VM (don't keep the temp NIC)"
 $vmDuplicate.StorageProfile.OsDisk.DeleteOption = 'Detach'
 $vmDuplicate.StorageProfile.DataDisks | ForEach-Object { $_.DeleteOption = 'Detach' }
 $vmDuplicate.NetworkProfile.NetworkInterfaces | ForEach-Object { $_.DeleteOption = 'Delete' }
-$vmDuplicate | Update-AzVM
+#$vmDuplicate | Update-AzVM
 
 # Get the VM information
 $osDiskName = $vmDuplicate.StorageProfile.OsDisk.Name
