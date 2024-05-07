@@ -71,7 +71,7 @@ $newDisk = DuplicateDisk $($vm.StorageProfile.OsDisk.Name) $($vm.SecurityProfile
 
 # Set the VM configuration to point to the new disk  
 Write-Host "--> Swapping the VM OS disk"
-Set-AzVMOSDisk -VM $vm -ManagedDiskId $($newDisk.Id) -Name $($newDisk.Name) -CreateOption Attach | Out-Null
+$vm = Set-AzVMOSDisk -VM $vm -ManagedDiskId $($newDisk.Id) -Name $($newDisk.Name) -CreateOption Attach | Out-Null
 
 Write-Host "-> Data Disks"
 # Need to create a duplicate object because we're looping on the object and altering it at the same time
@@ -90,25 +90,28 @@ $vmDataDisk | foreach {
 
         # Remove the old data disk from the VM
         Write-Host "--> Removing the old data disk $($_.Name)"
-        Remove-AzVMDataDisk -VM $vm -Name $($_.Name) | Out-Null
+        $vm = Remove-AzVMDataDisk -VM $vm -Name $($_.Name) | Out-Null
 
         # Attach the new data disk to the vm with the same LUN
         Write-Host "--> Attaching the new data disk $($newDisk.Name)"
-        Add-AzVMDataDisk -VM $vm -Name $($newDisk.Name) -CreateOption Attach -ManagedDiskId $($newDisk.Id) -Lun $($_.Lun) | Out-Null
+        $vm = Add-AzVMDataDisk -VM $vm -Name $($newDisk.Name) -CreateOption Attach -ManagedDiskId $($newDisk.Id) -Lun $($_.Lun) | Out-Null
     }
 }
 
 Write-Host "-> Creating the new VM"
-# Get the vnet and subnet name
+# Get the subnet ID
 $nicId = $vm.NetworkProfile.NetworkInterfaces[0].Id
 $nicObj = Get-AzNetworkInterface -ResourceId $nicId
-$subnetName = $nicObj.IpConfigurations.Subnet.Id
-$vnetName = ($subnetName -split '/')[8]
+$subnetId = $nicObj.IpConfigurations.Subnet.Id
 
 # Remove some parameters not needed for the creation
 $newVm = $vm | Select-Object -Property * -ExcludeProperty Id, VmId, ProvisioningState, RequestId, StatusCode, ResourceGroupName, TimeCreated, OsProfile, NetworkProfile
 $newVm.StorageProfile = $vm.StorageProfile | Select-Object -Property * -ExcludeProperty ImageReference
 $newVm.Name = "$($vm.Name)_noade"
 
-New-AzVM -VM $newVm -ResourceGroupName $rgName -Location $($vm.Location) -VirtualNetworkName $vnetName -SubnetName $subnetName
+# Create the NIC
+$nic = New-AzNetworkInterface -Name $($newVm.Name) -ResourceGroupName $rgName -Location $($vm.Location) -SubnetId $subnetId
+$newVm = Add-AzVMNetworkInterface -VM $newVm -Id $nic.Id
+
+New-AzVM -VM $newVm -ResourceGroupName $rgName -Location $($vm.Location)
 
