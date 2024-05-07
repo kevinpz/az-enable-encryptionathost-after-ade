@@ -15,13 +15,13 @@ Write-Host "-> Updating the delete behavior on the source VM (keep everything)"
 $vmSource.StorageProfile.OsDisk.DeleteOption = 'Detach'
 $vmSource.StorageProfile.DataDisks | ForEach-Object { $_.DeleteOption = 'Detach' }
 $vmSource.NetworkProfile.NetworkInterfaces | ForEach-Object { $_.DeleteOption = 'Detach' }
-$vmSource | Update-AzVM
+$vmSource | Update-AzVM | Out-Null
 
 Write-Host "-> Updating the delete behavior on the duplicate VM (don't keep the temp NIC)"
 $vmDuplicate.StorageProfile.OsDisk.DeleteOption = 'Detach'
 $vmDuplicate.StorageProfile.DataDisks | ForEach-Object { $_.DeleteOption = 'Detach' }
 $vmDuplicate.NetworkProfile.NetworkInterfaces | ForEach-Object { $_.DeleteOption = 'Delete' }
-$vmDuplicate | Update-AzVM
+$vmDuplicate | Update-AzVM | Out-Null
 
 # Get the VM information
 $osDiskName = $vmDuplicate.StorageProfile.OsDisk.Name
@@ -38,9 +38,9 @@ Write-Host "DATA DISKS = $($vmDataDisk| Out-String)"
 Write-Host "NIC = $nicId"
 
 # Delete the source VM and the duplicate VM
-Write-Host "-> Removing the duplicate VM"
+Write-Host "-> Removing the duplicate VM $($vmDuplicate.name)"
 Remove-AzVm -VM $vmDuplicate -ResourceGroupName $rgName -ForceDeletion $true
-Write-Host "-> Removing the source VM"
+Write-Host "-> Removing the source VM $($vmSource.name)"
 Remove-AzVm -VM $vmSource -ResourceGroupName $rgName -ForceDeletion $true
 
 # Create the new VM object
