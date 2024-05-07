@@ -107,7 +107,7 @@ $vnetName = ($subnetName -split '/')[7]
 
 # Remove some parameters not needed for the creation
 $newVm = $vm | Select-Object -Property * -ExcludeProperty Id, VmId, ProvisioningState, RequestId, StatusCode, ResourceGroupName, TimeCreated, OsProfile, NetworkProfile
-$newVm.StorageProfile = $vm.StorageProfile | Select-Object -Property * -ExcludeProperty 
+$newVm.StorageProfile = $vm.StorageProfile | Select-Object -Property * -ExcludeProperty ImageReference
 $newVm.Name = "$($vm.Name)_noade"
 
 New-AzVM -VM $newVm -ResourceGroupName $rgName -Location $vm.Location -VirtualNetworkName $vnetName -SubnetName $subnetName
