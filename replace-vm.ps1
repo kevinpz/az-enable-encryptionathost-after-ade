@@ -15,13 +15,13 @@ Write-Host "-> Updating the delete behavior on the source VM (keep everything)"
 $vmSource.StorageProfile.OsDisk.DeleteOption = 'Detach'
 $vmSource.StorageProfile.DataDisks | ForEach-Object { $_.DeleteOption = 'Detach' }
 $vmSource.NetworkProfile.NetworkInterfaces | ForEach-Object { $_.DeleteOption = 'Detach' }
-#$vmSource | Update-AzVM
+$vmSource | Update-AzVM
 
 Write-Host "-> Updating the delete behavior on the duplicate VM (don't keep the temp NIC)"
 $vmDuplicate.StorageProfile.OsDisk.DeleteOption = 'Detach'
 $vmDuplicate.StorageProfile.DataDisks | ForEach-Object { $_.DeleteOption = 'Detach' }
 $vmDuplicate.NetworkProfile.NetworkInterfaces | ForEach-Object { $_.DeleteOption = 'Delete' }
-#$vmDuplicate | Update-AzVM
+$vmDuplicate | Update-AzVM
 
 # Get the VM information
 $osDiskName = $vmDuplicate.StorageProfile.OsDisk.Name
@@ -31,7 +31,7 @@ $vmDuplicate.StorageProfile.DataDisks | foreach {
     $vmDataDisk += @{Name=$_.Name; Lun=$($_.Lun)}
 }
 
-Write-Host "-> DEBUG INFO"
+Write-Host "--> Source info"
 Write-Host "Location = $($vmSource.Location)"
 Write-Host "OS DISK = $osDiskName"
 Write-Host "DATA DISKS = $($vmDataDisk| Out-String)"
@@ -39,9 +39,9 @@ Write-Host "NIC = $nicId"
 
 # Delete the source VM and the duplicate VM
 Write-Host "-> Removing the duplicate VM"
-#Remove-AzVm -VM $vmDuplicate -ResourceGroupName $rgName -ForceDeletion $true
+Remove-AzVm -VM $vmDuplicate -ResourceGroupName $rgName -ForceDeletion $true
 Write-Host "-> Removing the source VM"
-#Remove-AzVm -VM $vmSource -ResourceGroupName $rgName -ForceDeletion $true
+Remove-AzVm -VM $vmSource -ResourceGroupName $rgName -ForceDeletion $true
 
 # Create the new VM object
 # Remove some parameters not needed for the creation
@@ -67,4 +67,4 @@ $vmDataDisk | foreach {
 Add-AzVMNetworkInterface -VM $newVm -Id $nicId | Out-Null
 
 Write-Host "-> Creating the new VM"
-#New-AzVM -VM $newVm -ResourceGroupName $rgName -Location $($vmSource.Location) | Out-Null
+New-AzVM -VM $newVm -ResourceGroupName $rgName -Location $($vmSource.Location) | Out-Null
