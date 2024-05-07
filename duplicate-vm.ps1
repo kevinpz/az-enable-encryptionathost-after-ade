@@ -71,7 +71,7 @@ $newDisk = DuplicateDisk $($vm.StorageProfile.OsDisk.Name) $($vm.SecurityProfile
 
 # Set the VM configuration to point to the new disk  
 Write-Host "--> Swapping the VM OS disk"
-Set-AzVMOSDisk -VM $vm -ManagedDiskId $($newDisk.Id) -Name $($newDisk.Name) | Out-Null
+Set-AzVMOSDisk -VM $vm -ManagedDiskId $($newDisk.Id) -Name $($newDisk.Name) -CreateOption Attach | Out-Null
 
 Write-Host "-> Data Disks"
 # Need to create a duplicate object because we're looping on the object and altering it at the same time
