@@ -61,7 +61,7 @@ function DuplicateDisk {
 }
 
 # Get the VM
-Write-Host "Finding the VM"
+Write-Host "-> Finding the VM"
 $vm = Get-AzVm -ResourceGroupName $rgName -Name $vmName
 
 Write-Host "-> OS Disk"
@@ -112,7 +112,7 @@ $newVm.Name = "$($vm.Name)_noade"
 # Create the NIC
 $newVm.NetworkProfile.NetworkInterfaces = [Array] $()
 $nic = New-AzNetworkInterface -Name $($newVm.Name) -ResourceGroupName $rgName -Location $($vm.Location) -SubnetId $subnetId
-Add-AzVMNetworkInterface -VM $newVm -Id $nic.Id
+Add-AzVMNetworkInterface -VM $newVm -Id $nic.Id | Out-Null
 
-New-AzVM -VM $newVm -ResourceGroupName $rgName -Location $($vm.Location)
+New-AzVM -VM $newVm -ResourceGroupName $rgName -Location $($vm.Location) | Out-Null
 
