@@ -71,7 +71,7 @@ $newDisk = DuplicateDisk $($vm.StorageProfile.OsDisk.Name) $($vm.SecurityProfile
 
 # Set the VM configuration to point to the new disk  
 Write-Host "--> Swapping the VM OS disk"
-$vm = Set-AzVMOSDisk -VM $vm -ManagedDiskId $($newDisk.Id) -Name $($newDisk.Name) -CreateOption Attach | Out-Null
+Set-AzVMOSDisk -VM $vm -ManagedDiskId $($newDisk.Id) -Name $($newDisk.Name) -CreateOption Attach | Out-Null
 
 Write-Host "-> Data Disks"
 # Need to create a duplicate object because we're looping on the object and altering it at the same time
@@ -90,11 +90,11 @@ $vmDataDisk | foreach {
 
         # Remove the old data disk from the VM
         Write-Host "--> Removing the old data disk $($_.Name)"
-        $vm = Remove-AzVMDataDisk -VM $vm -Name $($_.Name) | Out-Null
+        Remove-AzVMDataDisk -VM $vm -Name $($_.Name) | Out-Null
 
         # Attach the new data disk to the vm with the same LUN
         Write-Host "--> Attaching the new data disk $($newDisk.Name)"
-        $vm = Add-AzVMDataDisk -VM $vm -Name $($newDisk.Name) -CreateOption Attach -ManagedDiskId $($newDisk.Id) -Lun $($_.Lun) | Out-Null
+        Add-AzVMDataDisk -VM $vm -Name $($newDisk.Name) -CreateOption Attach -ManagedDiskId $($newDisk.Id) -Lun $($_.Lun) | Out-Null
     }
 }
 
@@ -111,7 +111,7 @@ $newVm.Name = "$($vm.Name)_noade"
 
 # Create the NIC
 $nic = New-AzNetworkInterface -Name $($newVm.Name) -ResourceGroupName $rgName -Location $($vm.Location) -SubnetId $subnetId
-$newVm = Add-AzVMNetworkInterface -VM $newVm -Id $nic.Id
+Add-AzVMNetworkInterface -VM $newVm -Id $nic.Id
 
 New-AzVM -VM $newVm -ResourceGroupName $rgName -Location $($vm.Location)
 
