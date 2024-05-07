@@ -32,9 +32,9 @@ $vmDuplicate.StorageProfile.DataDisks | foreach {
 }
 
 Write-Host "-> DEBUG INFO"
-Write-Host "Location = $($vm.Location)"
+Write-Host "Location = $($vmSource.Location)"
 Write-Host "OS DISK = $osDiskName"
-Write-Host "DATA DISKS = $vmDataDisk"
+Write-Host "DATA DISKS = $($vmDataDisk| Out-String)"
 Write-Host "NIC = $nicId"
 
 # Delete the source VM and the duplicate VM
@@ -46,8 +46,8 @@ Write-Host "-> Removing the source VM"
 # Create the new VM object
 # Remove some parameters not needed for the creation
 Write-Host "-> Creating the new VM config"
-$newVm = $vm | Select-Object -Property * -ExcludeProperty Id, VmId, ProvisioningState, RequestId, StatusCode, ResourceGroupName, TimeCreated, OsProfile
-$newVm.StorageProfile = $vm.StorageProfile | Select-Object -Property * -ExcludeProperty ImageReference
+$newVm = $vmSource | Select-Object -Property * -ExcludeProperty Id, VmId, ProvisioningState, RequestId, StatusCode, ResourceGroupName, TimeCreated, OsProfile
+$newVm.StorageProfile = $vmSource.StorageProfile | Select-Object -Property * -ExcludeProperty ImageReference
 
 # Set the VM configuration to point to the new disk  
 Write-Host "--> Swapping the VM OS disk"
@@ -67,4 +67,4 @@ $vmDataDisk | foreach {
 Add-AzVMNetworkInterface -VM $newVm -Id $nicId | Out-Null
 
 Write-Host "-> Creating the new VM"
-#New-AzVM -VM $newVm -ResourceGroupName $rgName -Location $($vm.Location) | Out-Null
+#New-AzVM -VM $newVm -ResourceGroupName $rgName -Location $($vmSource.Location) | Out-Null
