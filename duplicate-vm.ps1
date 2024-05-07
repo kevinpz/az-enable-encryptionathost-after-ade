@@ -21,6 +21,7 @@ function DuplicateDisk {
     # Check if the new disk already exists
     try {
         $targetDisk = Get-AzDisk -ResourceGroupName $rgName -DiskName $targetDiskName
+        Write-Host "---> Duplicate disk already exists"
     }
     # If not, create a new one
     catch {
@@ -99,7 +100,7 @@ $vmDataDisk | foreach {
 
 Write-Host "-> Creating the new VM"
 # Remove some parameters not needed for the creation
-$newVm = $vm | Select-Object -Property * -ExcludeProperty Id, VmId, ProvisioningState, RequestId, StatusCode, ResourceGroupName
+$newVm = $vm | Select-Object -Property * -ExcludeProperty Id, VmId, ProvisioningState, RequestId, StatusCode, ResourceGroupName, TimeCreated
 $newVm.Name = "$($vm.Name)_noade"
 
 New-AzVM -VM $newVm
