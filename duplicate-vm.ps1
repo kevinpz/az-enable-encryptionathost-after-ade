@@ -77,7 +77,7 @@ Write-Host "-> Data Disks"
 # Need to create a duplicate object because we're looping on the object and altering it at the same time
 [Array]$vmDataDisk = $()
 $vm.StorageProfile.DataDisks | foreach { 
-    $vmDataDisk += @{Name=$_.Name; Lun=$($_.Lun)}
+    $vmDataDisk += @{Name=$($_.Name); Lun=$($_.Lun)}
 }
 
 # Duplicate all the data disks
