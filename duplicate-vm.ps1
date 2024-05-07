@@ -110,5 +110,5 @@ $newVm = $vm | Select-Object -Property * -ExcludeProperty Id, VmId, Provisioning
 $newVm.StorageProfile = $vm.StorageProfile | Select-Object -Property * -ExcludeProperty ImageReference
 $newVm.Name = "$($vm.Name)_noade"
 
-New-AzVM -VM $newVm -ResourceGroupName $rgName -Location $(vm.Location) -VirtualNetworkName $vnetName -SubnetName $subnetName
+New-AzVM -VM $newVm -ResourceGroupName $rgName -Location $($vm.Location) -VirtualNetworkName $vnetName -SubnetName $subnetName
 
