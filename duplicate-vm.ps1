@@ -100,7 +100,7 @@ $vmDataDisk | foreach {
 
 Write-Host "-> Creating the new VM"
 # Get the vnet and subnet name
-$nicId = $vm.NetworkProfile.NetworkInterfaces[0]
+$nicId = $vm.NetworkProfile.NetworkInterfaces[0].Id
 $nicObj = Get-AzNetworkInterface -ResourceId $nicId
 $subnetName = $nicObj.IpConfigurations.Subnet.Id
 $vnetName = ($subnetName -split '/')[7]
