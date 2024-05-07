@@ -105,11 +105,12 @@ $nicObj = Get-AzNetworkInterface -ResourceId $nicId
 $subnetId = $nicObj.IpConfigurations.Subnet.Id
 
 # Remove some parameters not needed for the creation
-$newVm = $vm | Select-Object -Property * -ExcludeProperty Id, VmId, ProvisioningState, RequestId, StatusCode, ResourceGroupName, TimeCreated, OsProfile, NetworkProfile
+$newVm = $vm | Select-Object -Property * -ExcludeProperty Id, VmId, ProvisioningState, RequestId, StatusCode, ResourceGroupName, TimeCreated, OsProfile
 $newVm.StorageProfile = $vm.StorageProfile | Select-Object -Property * -ExcludeProperty ImageReference
 $newVm.Name = "$($vm.Name)_noade"
 
 # Create the NIC
+$newVm.NetworkProfile.NetworkInterfaces = [Array] $()
 $nic = New-AzNetworkInterface -Name $($newVm.Name) -ResourceGroupName $rgName -Location $($vm.Location) -SubnetId $subnetId
 Add-AzVMNetworkInterface -VM $newVm -Id $nic.Id
 
