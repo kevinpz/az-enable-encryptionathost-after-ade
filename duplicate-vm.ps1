@@ -70,7 +70,8 @@ $nicId = $vm.NetworkProfile.NetworkInterfaces[0].Id
 $nicObj = Get-AzNetworkInterface -ResourceId $nicId
 $subnetId = $nicObj.IpConfigurations.Subnet.Id
 
-$newVm = New-AzVMConfig -VMName "$($vm.Name)_noade" -VMSize $($vm.HardwareProfile.VmSize) -Tags $($vm.Tags)
+$newVmName = "$($vm.Name)_noade"
+$newVm = New-AzVMConfig -VMName $newVmName -VMSize $($vm.HardwareProfile.VmSize) -Tags $($vm.Tags)
 $newVm.SecurityProfile = $vm.SecurityProfile
 if($vm.LicenseType) {
     $newVm.LicenseType = $vm.LicenseType
@@ -116,3 +117,4 @@ $newVm.StorageProfile.osDisk.osType = $vm.StorageProfile.osDisk.osType
 
 Write-Host "-> Creating the new VM in Azure"
 New-AzVM -VM $newVm -ResourceGroupName $rgName -Location $($vm.Location) | Out-Null
+Write-Host "-> New VM $newVmName created, please check if everything is correct inside it!"
