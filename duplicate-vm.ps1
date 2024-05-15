@@ -104,12 +104,12 @@ $nicId = $vm.NetworkProfile.NetworkInterfaces[0].Id
 $nicObj = Get-AzNetworkInterface -ResourceId $nicId
 $subnetId = $nicObj.IpConfigurations.Subnet.Id
 
-$newVm = New-AzVMConfig -VMName "$($vm.Name)_noade" -VMSize $($vmSource.HardwareProfile.VmSize) -Tags $($vmSource.Tags)
-$newVm.SecurityProfile = $vmSource.SecurityProfile
-$newVm.LicenseType = $vmSource.LicenseType
-$newVm.Tags = $vmSource.Tags
-$newVm.DiagnosticsProfile = $vmSource.DiagnosticsProfile
-$newVm.AdditionalCapabilities = $vmSource.AdditionalCapabilities
+$newVm = New-AzVMConfig -VMName "$($vm.Name)_noade" -VMSize $($vm.HardwareProfile.VmSize) -Tags $($vm.Tags)
+$newVm.SecurityProfile = $vm.SecurityProfile
+$newVm.LicenseType = $vm.LicenseType
+$newVm.Tags = $vm.Tags
+$newVm.DiagnosticsProfile = $vm.DiagnosticsProfile
+$newVm.AdditionalCapabilities = $vm.AdditionalCapabilities
 
 # Create the NIC
 $newVm.NetworkProfile.NetworkInterfaces = [Array] $()
