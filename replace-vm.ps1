@@ -20,13 +20,13 @@ if (-Not($LoadFromFile)) {
     $vmSource.StorageProfile.OsDisk.DeleteOption = 'Detach'
     $vmSource.StorageProfile.DataDisks | ForEach-Object { $_.DeleteOption = 'Detach' }
     $vmSource.NetworkProfile.NetworkInterfaces | ForEach-Object { $_.DeleteOption = 'Detach' }
-    $vmSource | Update-AzVM | Out-Null
+    #$vmSource | Update-AzVM | Out-Null
 
     Write-Host "-> Updating the delete behavior on the duplicate VM (don't keep the temp NIC)"
     $vmDuplicate.StorageProfile.OsDisk.DeleteOption = 'Detach'
     $vmDuplicate.StorageProfile.DataDisks | ForEach-Object { $_.DeleteOption = 'Detach' }
     $vmDuplicate.NetworkProfile.NetworkInterfaces | ForEach-Object { $_.DeleteOption = 'Delete' }
-    $vmDuplicate | Update-AzVM | Out-Null
+    #$vmDuplicate | Update-AzVM | Out-Null
 
     # Saving the original VM object to the disk, just in case ...
     Write-Host "-> Saving the VM config to file just in case :)"
