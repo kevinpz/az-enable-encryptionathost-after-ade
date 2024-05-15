@@ -1,7 +1,7 @@
 # Mandatory information
-$subscriptionName = "Visual Studio Enterprise Subscription"
+$subscriptionName = "MCT"
 $rgName = "rg-ade-test"
-$vmName = "vm-test-encryption"
+$vmName = "vm-test-ade"
 
 # Stop on error
 $ErrorActionPreference = "Stop"

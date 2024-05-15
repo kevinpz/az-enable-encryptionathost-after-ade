@@ -116,4 +116,4 @@ $newVm.StorageProfile.osDisk.osType = $vm.StorageProfile.osDisk.osType
 
 Write-Host "-> Creating the new VM in Azure"
 New-AzVM -VM $newVm -ResourceGroupName $rgName -Location $($vm.Location) | Out-Null
-Write-Host "-> New VM $newVmName created, please check if everything is correct inside it!"
+Write-Host "-> New VM $newVmName created, please start the VM and check if everything is correct inside it!"
