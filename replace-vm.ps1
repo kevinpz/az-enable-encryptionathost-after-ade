@@ -51,6 +51,7 @@ else {
 
 # Get the VM information
 $osDiskName = $vmDuplicate.StorageProfile.OsDisk.Name
+$osDiskId = $vmDuplicate.StorageProfile.osDisk.ManagedDisk.Id
 $nicId = $vmSource.NetworkProfile.NetworkInterfaces[0].Id
 
 # Create the new VM object
@@ -66,7 +67,7 @@ $newVm.AdditionalCapabilities = $vmSource.AdditionalCapabilities
 
 # Set the VM configuration to point to the new disk  
 Write-Host "--> Setting the VM OS disk"
-Set-AzVMOSDisk -VM $newVm -Name $osDiskName -CreateOption Attach | Out-Null
+Set-AzVMOSDisk -VM $newVm -ManagedDiskId $osDiskId -Name $osDiskName -CreateOption Attach | Out-Null
 
 # Duplicate all the data disks
 $vmDuplicate.StorageProfile.DataDisks | foreach { 
