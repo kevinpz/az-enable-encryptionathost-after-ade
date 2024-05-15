@@ -64,6 +64,23 @@ function DuplicateDisk {
 Write-Host "-> Finding the VM"
 $vm = Get-AzVm -ResourceGroupName $rgName -Name $vmName
 
+Write-Host "-> Creating the new VM config"
+# Get the subnet ID
+$nicId = $vm.NetworkProfile.NetworkInterfaces[0].Id
+$nicObj = Get-AzNetworkInterface -ResourceId $nicId
+$subnetId = $nicObj.IpConfigurations.Subnet.Id
+
+$newVm = New-AzVMConfig -VMName "$($vm.Name)_noade" -VMSize $($vm.HardwareProfile.VmSize) -Tags $($vm.Tags)
+$newVm.SecurityProfile = $vm.SecurityProfile
+$newVm.LicenseType = $vm.LicenseType
+$newVm.Tags = $vm.Tags
+$newVm.DiagnosticsProfile = $vm.DiagnosticsProfile
+$newVm.AdditionalCapabilities = $vm.AdditionalCapabilities
+
+# Create the NIC
+$nic = New-AzNetworkInterface -Name $($newVm.Name) -ResourceGroupName $rgName -Location $($vm.Location) -SubnetId $subnetId
+Add-AzVMNetworkInterface -VM $newVm -Id $nic.Id | Out-Null
+
 Write-Host "-> OS Disk"
 # Duplicate the OS disk
 Write-Host "--> Duplicating the OS disk $($vm.StorageProfile.OsDisk.Name)"
@@ -98,21 +115,6 @@ $vmDataDisk | foreach {
     }
 }
 
-Write-Host "-> Creating the new VM"
-# Get the subnet ID
-$nicId = $vm.NetworkProfile.NetworkInterfaces[0].Id
-$nicObj = Get-AzNetworkInterface -ResourceId $nicId
-$subnetId = $nicObj.IpConfigurations.Subnet.Id
-
-$newVm = New-AzVMConfig -VMName "$($vm.Name)_noade" -VMSize $($vm.HardwareProfile.VmSize) -Tags $($vm.Tags)
-$newVm.SecurityProfile = $vm.SecurityProfile
-$newVm.LicenseType = $vm.LicenseType
-$newVm.Tags = $vm.Tags
-$newVm.DiagnosticsProfile = $vm.DiagnosticsProfile
-$newVm.AdditionalCapabilities = $vm.AdditionalCapabilities
-
-# Create the NIC
-$nic = New-AzNetworkInterface -Name $($newVm.Name) -ResourceGroupName $rgName -Location $($vm.Location) -SubnetId $subnetId
-Add-AzVMNetworkInterface -VM $newVm -Id $nic.Id | Out-Null
+Write-Host "-> Creating the new VM in Azure"
 
 New-AzVM -VM $newVm -ResourceGroupName $rgName -Location $($vm.Location) | Out-Null
