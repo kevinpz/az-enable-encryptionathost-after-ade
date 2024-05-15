@@ -86,4 +86,5 @@ Add-AzVMNetworkInterface -VM $newVm -Id $nicId | Out-Null
 $newVm.StorageProfile.osDisk.osType = $vm.StorageProfile.osDisk.osType
 
 Write-Host "-> Creating the new VM"
+$newVm
 New-AzVM -VM $newVm -ResourceGroupName $rgName -Location $($vmSource.Location) | Out-Null
