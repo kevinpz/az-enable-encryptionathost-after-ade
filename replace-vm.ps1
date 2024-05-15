@@ -120,8 +120,7 @@ $vmSource.NetworkProfile.NetworkInterfaces | foreach {
     # If this is the primary network card
     if ($_.Primary)
     {
-        Add-AzVMNetworkInterface -VM $vmDestination -Id $_.Id | Out-Null
-        #TBD Add-AzVMNetworkInterface -VM $vmDestination -Primary -Id $_.Id | Out-Null
+        Add-AzVMNetworkInterface -VM $vmDestination -Primary -Id $_.Id | Out-Null
     }
     else {
         Add-AzVMNetworkInterface -VM $vmDestination -Id $_.Id | Out-Null
