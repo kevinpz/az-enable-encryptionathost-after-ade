@@ -105,7 +105,10 @@ $vm.StorageProfile.DataDisks | foreach {
         Add-AzVMDataDisk -VM $newVm -Name $($newDisk.Name) -CreateOption Attach -ManagedDiskId $($newDisk.Id) -Lun $($_.Lun) | Out-Null
     }
 }
+#osType = $($vm.StorageProfile.osDisk.osType)
+#Set-AzVMOperatingSystem -VM $newVm -Windows -ComputerName $ComputerName -Credential $Credential -CustomData $CustomData -WinRMHttp -WinRMHttps -WinRMCertificateUrl $WinRMCertUrl -ProvisionVMAgent -EnableAutoUpdate -TimeZone $TimeZone -PatchMode "AutomaticByPlatform"
+$newVm.StorageProfile.osDisk.osType = $vm.StorageProfile.osDisk.osType
+
 
 Write-Host "-> Creating the new VM in Azure"
-
 New-AzVM -VM $newVm -ResourceGroupName $rgName -Location $($vm.Location) | Out-Null
