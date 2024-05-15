@@ -82,7 +82,7 @@ $vmDuplicate.StorageProfile.DataDisks | foreach {
 Add-AzVMNetworkInterface -VM $newVm -Id $nicId | Out-Null
 
 # Setting the OS type disk
-$newVm.StorageProfile.osDisk.osType = $vm.StorageProfile.osDisk.osType
+[Microsoft.Azure.Management.Compute.Models.OperatingSystemTypes]$newVm.StorageProfile.osDisk.osType = $vm.StorageProfile.osDisk.osType
 
 Write-Host "-> Creating the new VM"
 $newVm
