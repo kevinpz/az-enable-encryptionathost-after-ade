@@ -60,7 +60,6 @@ $newVm.SecurityProfile = $vmSource.SecurityProfile
 if($vm.LicenseType) {
     $newVm.LicenseType = $vm.LicenseType
 }
-$newVm.Tags = $vmSource.Tags
 $newVm.DiagnosticsProfile = $vmSource.DiagnosticsProfile
 $newVm.AdditionalCapabilities = $vmSource.AdditionalCapabilities
 ###TODO $newVm.Identity = $vmSource.Identity
