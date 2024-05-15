@@ -1,7 +1,3 @@
-param (
-  [switch] $LoadFromFile
-)
-
 # Load the env variable
 . ".\env.ps1"
 
