@@ -112,7 +112,6 @@ $newVm.DiagnosticsProfile = $vm.DiagnosticsProfile
 $newVm.AdditionalCapabilities = $vm.AdditionalCapabilities
 
 # Create the NIC
-$newVm.NetworkProfile.NetworkInterfaces = [Array] $()
 $nic = New-AzNetworkInterface -Name $($newVm.Name) -ResourceGroupName $rgName -Location $($vm.Location) -SubnetId $subnetId
 Add-AzVMNetworkInterface -VM $newVm -Id $nic.Id | Out-Null
 
