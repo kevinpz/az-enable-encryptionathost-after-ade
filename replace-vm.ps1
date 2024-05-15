@@ -30,8 +30,8 @@ if (-Not($LoadFromFile)) {
 
     # Saving the original VM object to the disk, just in case ...
     Write-Host "-> Saving the VM config to file just in case :)"
-    #$vmSource | Export-Clixml sourceVm.xml -Depth 20
-    #$vmDuplicate | Export-Clixml duplicateVm.xml -Depth 20
+    $vmSource | Export-Clixml sourceVm.xml -Depth 20
+    $vmDuplicate | Export-Clixml duplicateVm.xml -Depth 20
 
     Write-Host "-> If the script fails for whatever reason after the VM deletion ..."
     Write-Host "-> Use the following parameters to start it:"
@@ -39,9 +39,9 @@ if (-Not($LoadFromFile)) {
 
     # Delete the source VM and the duplicate VM
     Write-Host "-> Removing the duplicate VM $($vmDuplicate.Id)"
-    Remove-AzVm -Id $($vmDuplicate.Id) -ForceDeletion $true
+    #Remove-AzVm -Id $($vmDuplicate.Id) -ForceDeletion $true
     Write-Host "-> Removing the source VM $($vmSource.Id)"
-    Remove-AzVm -Id $($vmSource.Id) -ForceDeletion $true
+    #Remove-AzVm -Id $($vmSource.Id) -ForceDeletion $true
 }
 else {
     Write-Host "-> Loading source and duplicate config VM from file"
@@ -60,8 +60,15 @@ $vmDuplicate.StorageProfile.DataDisks | foreach {
 # Create the new VM object
 # Remove some parameters not needed for the creation
 Write-Host "-> Creating the new VM config"
-$newVm = $vmSource | Select-Object -Property * -ExcludeProperty Id, VmId, ProvisioningState, RequestId, StatusCode, ResourceGroupName, TimeCreated, OsProfile
-$newVm.StorageProfile = $vmSource.StorageProfile | Select-Object -Property * -ExcludeProperty ImageReference
+$newVm = New-AzVMConfig -VMName $($vmSource.Name) -VMSize $($vmSource.HardwareProfile.VmSize) -Tags $($vmSource.Tags)
+$newVm.SecurityProfile = $vmSource.SecurityProfile
+$newVm.LicenseType = $vmSource.LicenseType
+$newVm.Tags = $vmSource.Tags
+$newVm.DiagnosticsProfile = $vmSource.DiagnosticsProfile
+$newVm.AdditionalCapabilities = $vmSource.AdditionalCapabilities
+###TODO $newVm.Identity = $vmSource.Identity
+
+#$newVm = $vmSource | Select-Object -Property * -ExcludeProperty Id, VmId, ProvisioningState, RequestId, StatusCode, ResourceGroupName, TimeCreated, OsProfile
 
 # Set the VM configuration to point to the new disk  
 Write-Host "--> Swapping the VM OS disk"
