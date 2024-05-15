@@ -99,7 +99,7 @@ try {
     $vmSource | Update-AzVM | Out-Null
 
     # Saving the original VM object to the disk, just in case ...
-    Write-Host "-> Saving the VM config to file just in case :)"
+    Write-Host "-> Saving the VM config to file, just in case :)"
     $vmSource | Export-Clixml sourceVm.xml -Depth 20
 }
 catch {

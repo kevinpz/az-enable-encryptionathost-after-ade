@@ -24,7 +24,7 @@ Failed to update 'vm-test-ade'. Error: Encryption at host is not allowed for a V
 In order to enable encryption at host on a VM already encrypted with ADE you need to follow these steps:
 * Disable ADE
 * Remove the ADE extension
-* Create a new OS disk and optional data disk(S)
+* Create a new OS disk and optional data disk(s)
 * Copy the data from the old disk(s) to the new disks(s) (this step is mandatory otherwise you won't be able to enable encryption at host on a disk were ADE was previously enabled)
 * Delete the old VM and create a new one from the new disk(s)
 * Enable encryption at host
@@ -104,7 +104,7 @@ Output if it's **enabled**:
 
 ### Disable ADE
 > [!IMPORTANT]  
-> Be aware than disable ADE may reboot the VM
+> Be aware that disabling ADE may reboot the VM
 ```
 This cmdlet disables encryption on the VM which may reboot the machine. Please
 save your work on the VM before confirming. Do you want to continue?
@@ -132,9 +132,10 @@ Expected output:
 Directly duplicating the disk, or using a snapshot won't allow encryption at host to be enable. You need to create a new disk and transfer the data from the old one. The VM object also needs to be recreated in Azure by deleting the source VM and creating a new one.
 
 > [!IMPORTANT]  
-> The original VM disk will be preserved. A new OS disk and data disk(s) will be created with the suffix `_noade`.
+> The source VM disk(s) will be preserved. A new OS disk and data disk(s) will be created with the suffix `_noade`.
+> The source VM NIC(s) will be preserved and reattached to the new VM.
 
-You can run this command to do the start the process:
+You can run this command to start the process:
 ```bash
 pwsh replace-vm.ps1
 ```
@@ -145,7 +146,7 @@ Expected output:
 --> Source VM found in Azure
 -> Checking VM power state
 -> Updating the delete behavior on the source VM vm-test-ade (keep everything)
--> Saving the VM config to file just in case :)
+-> Saving the VM config to file, just in case :)
 -> Creating the new VM config
 -> Attaching the NIC(s) to the new VM
 --> Attaching the NIC: vm-test-ade529
@@ -182,7 +183,7 @@ Expected output:
 ----> Removing the SAS token for the old disk
 ----> Removing the SAS token for the new disk
 ---> Attaching the new data disk vm-test-ade_DataDisk_1_noade
--> Removing the source VM /subscriptions/570496f6-7110-44f4-bf19-e2ae12fab413/resourceGroups/rg-ade-test/providers/Microsoft.
+-> Removing the source VM /subscriptions/570496f6-7110-44f4-bf19-e2ae12fab413/resourceGroups/rg-ade-test/providers/Microsoft.Compute/virtualMachines/vm-test-ade
 --> VM successfully deleted
 -> Creating the new VM in Azure
 --> New VM vm-test-ade successfully created
@@ -216,7 +217,7 @@ In case something went wrong after the deletion of the source VM, you can restar
 
 ### Enable encryption at host
 > [!IMPORTANT]  
-> Be aware than to enable encryption at host the VM will be stopped.
+> Be aware that to enable encryption at the host, the VM will be stopped.
 
 Once the new VM is created, you can enable encryption at host.
 ```bash
