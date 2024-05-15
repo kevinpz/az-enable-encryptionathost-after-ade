@@ -39,9 +39,9 @@ if (-Not($LoadFromFile)) {
 
     # Delete the source VM and the duplicate VM
     Write-Host "-> Removing the duplicate VM $($vmDuplicate.Id)"
-    #Remove-AzVm -Id $($vmDuplicate.Id) -ForceDeletion $true
+    Remove-AzVm -Id $($vmDuplicate.Id) -ForceDeletion $true
     Write-Host "-> Removing the source VM $($vmSource.Id)"
-    #Remove-AzVm -Id $($vmSource.Id) -ForceDeletion $true
+    Remove-AzVm -Id $($vmSource.Id) -ForceDeletion $true
 }
 else {
     Write-Host "-> Loading source and duplicate config VM from file"
