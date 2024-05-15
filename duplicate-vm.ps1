@@ -89,7 +89,7 @@ Write-Host "--> Duplicating the OS disk $($vm.StorageProfile.OsDisk.Name)"
 $newDisk = DuplicateDisk $($vm.StorageProfile.OsDisk.Name) $($vm.SecurityProfile.UefiSettings.VTpmEnabled)
 
 # Set the VM configuration to point to the new disk  
-Write-Host "--> Swapping the VM OS disk"
+Write-Host "--> Setting the VM OS disk"
 Set-AzVMOSDisk -VM $newVm -ManagedDiskId $($newDisk.Id) -Name $($newDisk.Name) -CreateOption Attach | Out-Null
 
 Write-Host "-> Data Disks"
@@ -109,6 +109,8 @@ $vm.StorageProfile.DataDisks | foreach {
 }
 #osType = $($vm.StorageProfile.osDisk.osType)
 #Set-AzVMOperatingSystem -VM $newVm -Windows -ComputerName $ComputerName -Credential $Credential -CustomData $CustomData -WinRMHttp -WinRMHttps -WinRMCertificateUrl $WinRMCertUrl -ProvisionVMAgent -EnableAutoUpdate -TimeZone $TimeZone -PatchMode "AutomaticByPlatform"
+
+# Setting the OS type disk
 $newVm.StorageProfile.osDisk.osType = $vm.StorageProfile.osDisk.osType
 
 
