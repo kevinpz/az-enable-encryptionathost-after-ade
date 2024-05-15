@@ -72,7 +72,9 @@ $subnetId = $nicObj.IpConfigurations.Subnet.Id
 
 $newVm = New-AzVMConfig -VMName "$($vm.Name)_noade" -VMSize $($vm.HardwareProfile.VmSize) -Tags $($vm.Tags)
 $newVm.SecurityProfile = $vm.SecurityProfile
-$newVm.LicenseType = $vm.LicenseType
+if($vm.LicenseType) {
+    $newVm.LicenseType = $vm.LicenseType
+}
 $newVm.Tags = $vm.Tags
 $newVm.DiagnosticsProfile = $vm.DiagnosticsProfile
 $newVm.AdditionalCapabilities = $vm.AdditionalCapabilities
